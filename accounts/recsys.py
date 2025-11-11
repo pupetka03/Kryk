@@ -1,11 +1,12 @@
 from django.utils import timezone
 from datetime import timedelta
-from .models import Like, Publication, Tag
+from .models import Like, Publication, Tag, Comments
 from django.db.models import Count
 from django.db.models import Q
 import math
 import random
 from random import shuffle
+
 
 
 
@@ -52,10 +53,14 @@ def get_feed_for_user(user):
     candidates = list(candidates)
 
 
+
+
+
     # ========== Ранжування ===========
 
     # Готуємо нормалізацію
     max_likes = max((p.likes.count() for p in candidates), default=1)
+    max_comments = max((Comments.objects.filter(publication=pub1).count() for pub1 in candidates))
 
     def score_post(post):
         score = 0
@@ -69,6 +74,7 @@ def get_feed_for_user(user):
 
         # Популярність нормована → легкий бонус
         score += 0.3 * (post.likes.count() / max_likes)
+        score += 0.5 * (post.comments.count() / max_comments)
 
         # Новизна → посилюємо свіжі пости
         age_seconds = (timezone.now() - post.created_at).total_seconds()
@@ -158,6 +164,7 @@ def get_random_feed_for_user(user):
     
     #======== Ранжування =========
     max_likes = max((p.likes.count() for p in candidates), default=1)
+    max_comments = max((Comments.objects.filter(publication=pub1).count() for pub1 in candidates))
     def score_post(post):
         score = 0
 
@@ -172,6 +179,7 @@ def get_random_feed_for_user(user):
         score += 1 * freshness
 
         score += 0.3 * (post.likes.count() / max_likes)
+        score += 0.5 * (post.comments.count() / max_comments)
 
 
         return score
