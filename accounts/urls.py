@@ -16,7 +16,4 @@ urlpatterns = [
     path("search/<str:search>/", views.search, name="search"),
 
 
-    path('testing/<str:search>/', views.test, name='test'),
-
-
 ]

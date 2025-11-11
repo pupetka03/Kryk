@@ -187,17 +187,5 @@ def search(request, search):
 
 
 
-# ================= Only Test, Dont for prodaction ==============================
-def test(request, search):
-
-    tags = list(Tag.objects.values_list('name', flat=True))
-    best_match = process.extractOne(search, tags)
-    if best_match:
-        tags_pub = Tag.objects.get(name=best_match[0])
-        posts = Publication.objects.filter(tags=tags_pub)
-        
-
-    
-    return redirect('home_page')
 
 

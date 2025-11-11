@@ -100,6 +100,11 @@
                     </div>
                 </div>
             </div>
+                    <div class="text-center">
+            <a href="{% url 'home_page' %}" class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-lg transition">
+                ← Назад до стрічки
+            </a>
+        </div>
         </div>
 
         <!-- Перемикач табів -->
@@ -119,19 +124,19 @@
             <!-- Твіти юзера -->
             <div id="posts" class="tab-content active p-4">
                 {% if publications %}
-                    {% for post in publications %}
-                    <div class="border border-gray-200 rounded-lg p-4 mb-3 hover:bg-gray-50 transition">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="font-semibold text-gray-900">{{ post.title }}</div>
-                            <div class="text-sm text-gray-500">{{ post.created_at|date:"d.m.Y" }}</div>
-                        </div>
-                        <div class="text-gray-800 mb-3">{{ post.text }}</div>
-                        <div class="flex gap-4 text-sm text-gray-600">
-                            <span>💬 {{ post.comments.count }}</span>
-                            <span>❤️ {{ post.likes.count }}</span>
-                        </div>
-                    </div>
-                    {% endfor %}
+{% for post in publications %}
+    <a href="{% url 'pub' post.slug %}" class="block border border-gray-200 rounded-lg p-4 mb-3 hover:bg-gray-50 transition">
+        <div class="flex justify-between items-start mb-2">
+            <div class="font-semibold text-gray-900">{{ post.title }}</div>
+            <div class="text-sm text-gray-500">{{ post.created_at|date:"d.m.Y" }}</div>
+        </div>
+        <div class="text-gray-800 mb-3">{{ post.text }}</div>
+        <div class="flex gap-4 text-sm text-gray-600">
+            <span>💬 {{ post.comments.count }}</span>
+            <span>❤️ {{ post.likes.count }}</span>
+        </div>
+    </a>
+{% endfor %}
                 {% else %}
                     <div class="empty-state">
                         <div class="text-4xl mb-2">📝</div>
@@ -144,18 +149,18 @@
             <!-- Лайкнуті твіти -->
             <div id="likes" class="tab-content p-4">
                 {% if likes_publication %}
-                    {% for post in likes_publication %}
-                    <div class="like-badge mb-3">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="font-semibold text-gray-900">{{ post.publication.title }}</div>
-                            <div class="text-sm text-gray-500">Лайкнуто {{ post.created_at|date:"d.m.Y" }}</div>
-                        </div>
-                        <div class="text-gray-800 mb-2">{{ post.publication.text|truncatewords:20 }}</div>
-                        <div class="text-sm text-gray-600">
-                            Автор: @{{post.publication.username}}
-                        </div>
-                    </div>
-                    {% endfor %}
+{% for post in likes_publication %}
+    <a href="{% url 'pub' post.publication.slug %}" class="block like-badge mb-3 hover:bg-gray-50 transition rounded-lg p-4">
+        <div class="flex justify-between items-start mb-2">
+            <div class="font-semibold text-gray-900">{{ post.publication.title }}</div>
+            <div class="text-sm text-gray-500">Лайкнуто {{ post.created_at|date:"d.m.Y" }}</div>
+        </div>
+        <div class="text-gray-800 mb-2">{{ post.publication.text|truncatewords:20 }}</div>
+        <div class="text-sm text-gray-600">
+            Автор: @{{ post.user }}
+        </div>
+    </a>
+{% endfor %}
                 {% else %}
                     <div class="empty-state">
                         <div class="text-4xl mb-2">❤️</div>
@@ -169,21 +174,21 @@
             <div id="comments" class="tab-content p-4">
                 {% if coments_user %}
                     {% for comment in coments_user %}
-                    <div class="comment-badge mb-3">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="font-semibold text-gray-900">До твіту: {{ comment.publication.title }}</div>
-                            <div class="text-sm text-gray-500">{{ comment.created_at|date:"d.m.Y" }}</div>
-                        </div>
-                        <div class="text-gray-800 mb-2">{{ comment.text }}</div>
-                        <div class="text-sm text-gray-600">
-                            {% if comment.parent %}
-                                💬 Відповідь на коментар @{{ comment.parent.user.username }}
-                            {% else %}
-                                💬 Коментар
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
+    <a href="{% url 'pub' comment.publication.slug %}" class="block comment-badge mb-3 hover:bg-gray-50 transition rounded-lg p-4">
+        <div class="flex justify-between items-start mb-2">
+            <div class="font-semibold text-gray-900">До твіту: {{ comment.publication.title }}</div>
+            <div class="text-sm text-gray-500">{{ comment.created_at|date:"d.m.Y" }}</div>
+        </div>
+        <div class="text-gray-800 mb-2">{{ comment.text }}</div>
+        <div class="text-sm text-gray-600">
+            {% if comment.parent %}
+                💬 Відповідь на коментар @{{ comment.parent.user.username }}
+            {% else %}
+                💬 Коментар
+            {% endif %}
+        </div>
+    </a>
+{% endfor %}
                 {% else %}
                     <div class="empty-state">
                         <div class="text-4xl mb-2">💬</div>

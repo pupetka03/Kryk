@@ -89,7 +89,6 @@ def get_feed_for_user(user):
     
     # ---- Підмішування популярних (щоб фід був живим) ----
     popular_list = list(popular_posts)
-    #debug_feed(candidates, score_post)
     
 
     if popular_list:
@@ -103,7 +102,7 @@ def get_feed_for_user(user):
             if p not in candidates:
                 candidates.insert(i, p)
                 i += step
-        #vidlatka(authors, tags, popular_posts)
+    #vidlatka(authors, tags, popular_posts)
     #debug_feed(candidates, score_post)
     return candidates
 
