@@ -144,7 +144,7 @@ def create_comments(request, slug, parent=None):
             else:
                 obj.save()
 
-        return redirect("home_page")
+        return redirect('pub', slug=pub.slug)
 
     else:
         form = CreateCommentsForms()

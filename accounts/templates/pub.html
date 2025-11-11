@@ -67,34 +67,14 @@
                     <div class="comment-text">{{ comment.text }}</div>
                     <div class="comment-actions">
                         <a href="{% url 'create_reply' pub.slug comment.id %}" class="reply-btn">Відповісти</a>
-                        <button class="comment-like-btn" data-comment-id="{{ comment.id }}">
+                        <button class="comment-like-btn" data-comment-id="{{comment}}">
                             ♡ <span class="comment-like-count">{{ comment.likes.count }}</span>
                         </button>
                     </div>
                 </div>
 
                 {% for reply in comment.replies.all %}
-                <div class="replies-wrapper">
-                    <div class="reply-item">
-                        <div class="reply-header">
-                            <div class="reply-author-avatar">
-                                {{ reply.user.username|first|upper }}
-                            </div>
-                            <div class="reply-author-info">
-                                <span class="reply-author">{{ reply.user.username }}</span>
-                                <span class="reply-time">{{ reply.created_at|timesince }} тому</span>
-                            </div>
-                        </div>
-                        <div class="reply-text">
-                            <span class="reply-to">@{{ comment.user.username }}</span> {{ reply.text }}
-                        </div>
-                        <div class="reply-actions">
-                            <button class="reply-like-btn" data-comment-id="{{ reply.id }}">
-                                ♡ <span class="reply-like-count">{{ reply.likes.count }}</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                    {% include "_replies.html" with reply=reply %}
                 {% endfor %}
             </div>
             {% endif %}

@@ -1,15 +1,34 @@
-{% if comment.replies.all %}
-<div class="replies-wrapper">
-    {% for reply in comment.replies.all %}
-        <div class="reply-item">
-            <div class="reply-author">
-                {{ reply.user }} <span class="post-handle">@{{ reply.user.username }} > to @{{ comment.user }}</span>
-            </div>
-            <div class="reply-text">{{ reply.text }}</div>
-
-            {# Рекурсивно підключаємо _replies для реплайя #}
-            {% include "_replies.html" with comment=reply %}
+<div class="reply-item">
+    <div class="reply-header">
+        <div class="reply-avatar">{{ reply.user.username|first|upper }}</div>
+        <div class="reply-info">
+            <span class="reply-author">{{ reply.user.username }}</span>
+            <span class="reply-time">{{ reply.created_at|timesince }} тому</span>
         </div>
-    {% endfor %}
+    </div>
+
+    <div class="reply-text">
+        <span class="reply-to">@{{ reply.parent.user.username }}</span>
+        {{ reply.text }}
+    </div>
+
+    <div class="reply-actions">
+        <button class="reply-like-btn" data-comment-id="{{ reply.id }}">
+            ♡ <span class="reply-like-count">{{ reply.likes.count }}</span>
+        </button>
+    <button class="reply-reply-btn" data-comment-id="{{ reply.id }}" onclick="window.location.href='{% url 'create_reply' pub.slug reply.id %}'">
+        💬 Відповісти
+    </button>
+    </div>
+
+    {% if reply.replies.all %}
+    <div class="replies-wrapper">
+        {% for r in reply.replies.all %}
+            {% include "_replies.html" with reply=r %}
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
-{% endif %}
+
+
+

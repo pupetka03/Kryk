@@ -28,7 +28,7 @@ DEBUG = True
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret')  # fallback для локалки
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ["localhost", "192.168.0.212"]
+ALLOWED_HOSTS = ["localhost", "192.168.0.212", "147.175.113.199"]
 
 AUTH_USER_MODEL = 'accounts.User'
 
